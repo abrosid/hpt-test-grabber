@@ -27,4 +27,17 @@ class Dispatcher
 
         return $this->output->getJson();
     }
+    
+    public function getGrabber(): Grabber {
+	return $this->grabber;
+    }
+
+    public function getOutput(): Output {
+	return $this->output;
+    }
+
+    
+
+
+    
 }
