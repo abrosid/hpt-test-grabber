@@ -3,11 +3,13 @@ parameters:
     searchUri: https://www.czc.cz/|code|/hledat
     searchTerm: |code|
     filterPrice: 'substring-before(substring-after(string(//div[@class=''new-tile'']/@data-ga-impression), ''price":''), '',"quantity'')'
+    filterRating: 'substring-before(substring-after(string(//div[@class=''new-tile'']//span[@class=''rating'']/@title), '': ''), '' %'')'
 
 services:
 	dispatcher: 
 		factory: HPT\Product\ProductGrabber(%searchUri%, %searchTerm%)
 		setup: 
 		    - setFilterPrice(%filterPrice%)
+		    - setFilterRating(%filterRating%)
 	- HPT\Product\ProductOutput
 	- HPT\Product\ProductDispatcher(%filename%)

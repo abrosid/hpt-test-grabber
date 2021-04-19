@@ -44,9 +44,11 @@ class ProductDispatcher extends Dispatcher {
 	    return "File is empty: " . $this->filename;
 	
 	foreach ($this->productCodes as $code) {
-	    
 	    $price = $this->getGrabber()->getPrice($code);
 	    $data["price"] = $price;
+	    $rating = $this->getGrabber()->getRating($code);
+	    $data["rating"] = $rating;
+	    
 	    $this->getOutput()->addProductData($code, $data);
 	}
 	

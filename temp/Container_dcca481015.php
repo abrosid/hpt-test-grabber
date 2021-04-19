@@ -29,6 +29,7 @@ class Container_dcca481015 extends Nette\DI\Container
 			'searchUri' => 'https://www.czc.cz/|code|/hledat',
 			'searchTerm' => '|code|',
 			'filterPrice' => 'substring-before(substring-after(string(//div[@class=\'new-tile\']/@data-ga-impression), \'price":\'), \',"quantity\')',
+			'filterRating' => 'substring-before(substring-after(string(//div[@class=\'new-tile\']//span[@class=\'rating\']/@title), \': \'), \' %\')',
 		];
 	}
 
@@ -55,6 +56,7 @@ class Container_dcca481015 extends Nette\DI\Container
 	{
 		$service = new HPT\Product\ProductGrabber('https://www.czc.cz/|code|/hledat', '|code|');
 		$service->setFilterPrice('substring-before(substring-after(string(//div[@class=\'new-tile\']/@data-ga-impression), \'price":\'), \',"quantity\')');
+		$service->setFilterRating('substring-before(substring-after(string(//div[@class=\'new-tile\']//span[@class=\'rating\']/@title), \': \'), \' %\')');
 		return $service;
 	}
 

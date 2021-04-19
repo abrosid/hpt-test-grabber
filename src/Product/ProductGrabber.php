@@ -9,9 +9,6 @@ use Symfony\Component\DomCrawler\Crawler;
 
 class ProductGrabber implements Grabber {
 
-    const  _filterPrice="substring-before(substring-after(string(//div[@class='new-tile']/@data-ga-impression), 'price\":'), ',\"quantity')";
-   
-
     /**
      * @var string
      */
@@ -21,7 +18,7 @@ class ProductGrabber implements Grabber {
      * @var string
      */
     private $searchUri;
-    
+
     /**
      * 
      * @var string
@@ -36,30 +33,63 @@ class ProductGrabber implements Grabber {
 	$this->filterPrice = $filterPrice;
     }
 
-    
+    /**
+     * 
+     * @var string
+     */
+    private $filterRating;
+
+    public function getFilterRating(): string {
+	return $this->filterRating;
+    }
+
+    public function setFilterRating(string $filterRating): void {
+	$this->filterRating = $filterRating;
+    }
+
     public function __construct(string $searchUri, string $searchTerm) {
 	$this->searchUri = $searchUri;
 	$this->searchTerm = $searchTerm;
     }
 
-    
-        
-    
-    public function getPrice(string $productId): float {
-	$uri = \str_replace($this->searchTerm, $productId, $this->searchUri);
-	$content = $this->fetchUri($uri);
-	$crawler = new Crawler($content);
-	
+    public function getPrice(string $productId): ?float {
+	$crawler = new Crawler($this->getContent($productId));
 	$results = $crawler->evaluate($this->getFilterPrice());
 	if ($results && !empty($results[0])) {
 	    return (float) $results[0];
 	}
-	return 0.0;
+	return null;
+    }
+
+    public function getRating(string $productId): ?float {
+	$crawler = new Crawler($this->getContent($productId));
+	$results = $crawler->evaluate($this->getFilterRating());
+	
+	if ($results && !empty($results[0])) {
+	    return (float) $results[0];
+	}
+	return null;
     }
 
     private function fetchUri(string $uri) {
 	$content = @\file_get_contents($uri);
 	return $content ? $content : "<html></html>";
+    }
+
+    /**
+     * 
+     * @var string
+     */
+    private $content;
+    private $uri;
+
+    function getContent(string $productId): string {
+	$uri = \str_replace($this->searchTerm, $productId, $this->searchUri);
+	if ($this->uri != $uri) {
+	    $this->uri = $uri;
+	    $this->content = $this->fetchUri($this->uri);
+	}
+	return $this->content;
     }
 
 }
