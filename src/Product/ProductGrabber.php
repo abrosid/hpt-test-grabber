@@ -47,6 +47,18 @@ class ProductGrabber implements Grabber {
 	$this->filterRating = $filterRating;
     }
 
+    private $filterName;
+    
+    public function getFilterName() {
+	return $this->filterName;
+    }
+
+    public function setFilterName($filterName): void {
+	$this->filterName = $filterName;
+    }
+
+    
+
     public function __construct(string $searchUri, string $searchTerm) {
 	$this->searchUri = $searchUri;
 	$this->searchTerm = $searchTerm;
@@ -67,6 +79,16 @@ class ProductGrabber implements Grabber {
 	
 	if ($results && !empty($results[0])) {
 	    return (float) $results[0];
+	}
+	return null;
+    }
+    
+    public function getName(string $productId): ?string {
+	$crawler = new Crawler($this->getContent($productId));
+	$results = $crawler->evaluate($this->getFilterName());
+	
+	if ($results && !empty($results[0])) {
+	    return $results[0];
 	}
 	return null;
     }

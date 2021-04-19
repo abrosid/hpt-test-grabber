@@ -4,6 +4,7 @@ parameters:
     searchTerm: |code|
     filterPrice: 'substring-before(substring-after(string(//div[@class=''new-tile'']/@data-ga-impression), ''price":''), '',"quantity'')'
     filterRating: 'substring-before(substring-after(string(//div[@class=''new-tile'']//span[@class=''rating'']/@title), '': ''), '' %'')'
+    filterName: 'substring-before(substring-after(string(//div[@class=''new-tile'']/@data-ga-impression), ''name":"''), ''","position'')'
 
 services:
 	dispatcher: 
@@ -11,5 +12,6 @@ services:
 		setup: 
 		    - setFilterPrice(%filterPrice%)
 		    - setFilterRating(%filterRating%)
+		    - setFilterName(%filterName%)
 	- HPT\Product\ProductOutput
 	- HPT\Product\ProductDispatcher(%filename%)

@@ -46,6 +46,8 @@ class ProductDispatcher extends Dispatcher {
 	foreach ($this->productCodes as $code) {
 	    $price = $this->getGrabber()->getPrice($code);
 	    $data["price"] = $price;
+	    $name = $this->getGrabber()->getName($code);
+	    $data["name"] = $name;
 	    $rating = $this->getGrabber()->getRating($code);
 	    $data["rating"] = $rating;
 	    
