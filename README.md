@@ -1,6 +1,3 @@
-### Instructions
-
-Create a folder named `temp` 
 
 ### Running
 
