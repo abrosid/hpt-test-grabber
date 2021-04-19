@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace HPT;
 
-class Dispatcher
+abstract class Dispatcher
 {
     /** @var Grabber */
-    private $grabber;
+    protected $grabber;
 
     /** @var Output */
-    private $output;
+    protected $output;
 
     public function __construct(Grabber $grabber, Output $output)
     {
@@ -18,26 +18,8 @@ class Dispatcher
         $this->output = $output;
     }
 
-    /**
-     * @return string JSON
-     */
     public function run(): string
     {
-        // code here
-
         return $this->output->getJson();
     }
-    
-    public function getGrabber(): Grabber {
-	return $this->grabber;
-    }
-
-    public function getOutput(): Output {
-	return $this->output;
-    }
-
-    
-
-
-    
 }

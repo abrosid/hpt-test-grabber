@@ -7,12 +7,9 @@ use Nette\DI\ContainerLoader;
 
 require_once __DIR__ . '/vendor/autoload.php';
 
-// code here
-// $dispatcher = new \HPT\Dispatcher( ... );
-// $dispatcher->run();
-
 if (PHP_SAPI !== 'cli') {
     echo 'This script must be run from CLI.';
+
     exit(1);
 }
 
@@ -28,6 +25,3 @@ $container = new $class;
 $dispatcher = $container->getByType(ProductDispatcher::class);
 
 echo $dispatcher->run();
-
-
-

@@ -3,3 +3,5 @@
 /vendor/
 /nbproject
 /temp
+/.history
+/composer.lock

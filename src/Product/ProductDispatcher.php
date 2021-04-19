@@ -6,55 +6,56 @@ namespace HPT\Product;
 
 use HPT\Dispatcher;
 
-class ProductDispatcher extends Dispatcher {
+class ProductDispatcher extends Dispatcher
+{
+	/**
+	 * @var string
+	 */
+	private $filename;
 
-    /**
-     * @var string
-     */
-    private $filename;
+	/**
+	 * @var array
+	 */
+	private $productCodes;
 
-    /**
-     * 
-     * @var array
-     */
-    private $productCodes;
-
-    public function __construct(string $filename, ProductGrabber $grabber, ProductOutput $output) {
-	parent::__construct($grabber, $output);
-	$this->filename = $filename;
-    }
-
-    public function getGrabber(): ProductGrabber {
-	return parent::getGrabber();
-    }
-
-    public function getOutput(): ProductOutput {
-	return parent::getOutput();
-    }
-
-    public function run(): string {
-
-	if (\file_exists($this->filename)) {
-	    $this->productCodes = file($this->filename, FILE_IGNORE_NEW_LINES);
-	} else {
-	    return "File not exists: " . $this->filename;
+	public function __construct(string $filename, ProductGrabber $grabber, ProductOutput $output)
+	{
+		$this->filename = $filename;
+		$this->productCodes = [];
+	
+		parent::__construct($grabber, $output);
 	}
 
-	if (empty($this->productCodes))
-	    return "File is empty: " . $this->filename;
-	
-	foreach ($this->productCodes as $code) {
-	    $price = $this->getGrabber()->getPrice($code);
-	    $data["price"] = $price;
-	    $name = $this->getGrabber()->getName($code);
-	    $data["name"] = $name;
-	    $rating = $this->getGrabber()->getRating($code);
-	    $data["rating"] = $rating;
-	    
-	    $this->getOutput()->addProductData($code, $data);
+	public function getGrabber(): ProductGrabber
+	{
+		return $this->grabber;
 	}
-	
-	return parent::run();
-    }
 
+	public function getOutput(): ProductOutput
+	{
+		return $this->output;
+	}
+
+	public function run(): string
+	{
+		if (\file_exists($this->filename)) {
+			$this->productCodes = file($this->filename, FILE_IGNORE_NEW_LINES);
+		} else {
+			return "File not exists: " . $this->filename;
+		}
+
+		if (empty($this->productCodes)) {
+			return "No product codes in the file: " . $this->filename;
+		}
+
+		foreach ($this->productCodes as $code) {
+			$data["price"] = $this->getGrabber()->getPrice($code);
+			$data["name"] = $this->getGrabber()->getName($code);
+			$data["rating"] = $this->getGrabber()->getRating($code);
+
+			$this->getOutput()->addProductData($code, $data);
+		}
+
+		return parent::run();
+	}
 }
